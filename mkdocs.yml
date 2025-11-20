@@ -1,9 +1,16 @@
-site_name: My MkDocs Material Documentation
+site_name: MicroTrace Documentation
 site_url: https://sitename.example
 theme:
   name: material
+  font:
+    text: Merriweather Sans
+    code: Red Hat Mono
+  logo: assets/MicroTrace_Logo.png
+  favicon: assets/favicon.ico
+  features:
+    - navigation.footer
   palette:
-    # Dark Mode
+    # Dark Mode
     - scheme: slate
       toggle:
         icon: material/weather-sunny
@@ -18,3 +25,33 @@ theme:
         name: Light mode
       primary: blue
       accent: deep orange
+
+markdown_extensions:
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/omarsawaf1
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/omar-mohamed-hatem-057a8025b/
+
+copyright: Copyright &copy; 2025 MicroTrace Team
