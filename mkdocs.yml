@@ -1,5 +1,10 @@
 site_name: MicroTrace Documentation
-site_url: https://sitename.example
+site_url: https://omarsawaf1.github.io/MicroTrace-Docs/
+site_author: Omar Mohamed
+site_description: MicroTrace Documentation
+repo_name: MicroTrace-Docs
+repo_url: https://github.com/omarsawaf1/MicroTrace-Docs
+
 theme:
   name: material
   font:
@@ -8,7 +13,9 @@ theme:
   logo: assets/MicroTrace_Logo.png
   favicon: assets/favicon.ico
   features:
+    - navigation.tabs
     - navigation.footer
+    # - toc.integrate
   palette:
     # Dark Mode
     - scheme: slate
@@ -28,6 +35,9 @@ theme:
 
 markdown_extensions:
   - attr_list
+  # - toc:
+  #   permalink: true
+  #   toc_depth: 3
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
@@ -55,3 +65,13 @@ extra:
       link: https://www.linkedin.com/in/omar-mohamed-hatem-057a8025b/
 
 copyright: Copyright &copy; 2025 MicroTrace Team
+
+nav:
+  - Home: index.md
+  - STM32 SVD Database: svd_database.md
+  - MCP Server: mcp.md
+  # - Ghidra Scripts: ghidra.md
+  # - Frontend Visualization: frontend.md
+  # - Features:
+  #     - Overview: features/README.md
+  # - Use Cases: usecases.md
