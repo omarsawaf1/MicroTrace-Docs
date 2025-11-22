@@ -1,19 +1,5 @@
 # MCP Server Documentation
 
-## Table of Contents
-
-1. [What is MCP?](#what-is-mcp)
-2. [How MCP Works](#how-mcp-works)
-3. [What We Did](#what-we-did)
-4. [Setup Steps](#setup-steps)
-5. [Example: PDF Reader Tool](#example-pdf-reader-tool)
-6. [Project Structure](#project-structure)
-7. [Commands Reference](#commands-reference)
-8. [Future Work Hints](#future-work-hints)
-9. [Key Takeaways](#key-takeaways)
-10. [Summary](#summary)
-
----
 
 ## What is MCP?
 

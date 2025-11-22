@@ -10,21 +10,6 @@
 
 ---
 
-## Table of Contents
-
-- [Project Overview](#project-overview)
-- [Project Phases](#project-phases)
-
-  - [Phase 1 – SBOM Extraction and Visualization](#phase1)
-  - [Phase 2 – AI-Driven Analysis and Vulnerability Detection](#phase2)
-
-- [Key Technologies](#key-technologies)
-- [Time Plan](#time-plan)
-- [Final Outcomes](#final-outcomes)
-- [Use Cases](#use-cases)
-
----
-
 ## Project Overview
 
 **MicroTrace** is a research and development project designed to automatically generate a **Software Bill of Materials (SBOM)** from **bare-metal embedded firmware**.

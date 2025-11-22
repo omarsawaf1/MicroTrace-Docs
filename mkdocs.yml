@@ -13,25 +13,28 @@ theme:
   logo: assets/MicroTrace_Logo.png
   favicon: assets/favicon.ico
   features:
-    - navigation.tabs
-    - navigation.footer
-    # - toc.integrate
+    - navigation.tabs      #The navigation moves horizontally to the top as Tabs, next to the logo, instead of in the sidebar.
+    - navigation.footer 
+    - toc.integrate
   palette:
-    # Dark Mode
-    - scheme: slate
+    - media: "(prefers-color-scheme)"
       toggle:
-        icon: material/weather-sunny
-        name: Dark mode
-      primary: green
-      accent: deep purple
-
-    # Light Mode
-    - scheme: default
+        icon: material/link
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
       toggle:
-        icon: material/weather-night
-        name: Light mode
-      primary: blue
-      accent: deep orange
+        icon: material/toggle-switch
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off
+        name: Switch to system preference
 
 markdown_extensions:
   - attr_list
