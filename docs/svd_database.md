@@ -217,3 +217,6 @@ if __name__ == "__main__":
 
 **Screenshot:**
 _Include a screenshot of the MongoDB document view for clarity._
+
+<img src="../assets/mongoDB.png" alt="MongoDB Logo" 
+     style="display:block; margin:auto; width:80%; max-width:800px; border:2px solid #4c7caff; border-radius:8px; padding:5px;">
