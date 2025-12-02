@@ -16,6 +16,7 @@ theme:
     - navigation.tabs      #The navigation moves horizontally to the top as Tabs, next to the logo, instead of in the sidebar.
     - navigation.footer 
     - toc.integrate
+    - navigation.sections
   palette:
     - media: "(prefers-color-scheme)"
       toggle:
@@ -73,6 +74,9 @@ nav:
   - Home: index.md
   - STM32 SVD Database: svd_database.md
   - MCP Server: mcp.md
+  - Ghidra Tools:
+      - Headless Analyzer: Headless-Ghidra-ARM-Firmware-Analyzer.md
+
   # - Ghidra Scripts: ghidra.md
   # - Frontend Visualization: frontend.md
   # - Features:
