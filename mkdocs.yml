@@ -76,7 +76,6 @@ nav:
   - MCP Server: mcp.md
   - Ghidra Tools:
       - Headless Analyzer: Headless-Ghidra-ARM-Firmware-Analyzer.md
-
   # - Ghidra Scripts: ghidra.md
   # - Frontend Visualization: frontend.md
   # - Features:
