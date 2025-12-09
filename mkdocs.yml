@@ -13,8 +13,8 @@ theme:
   logo: assets/MicroTrace_Logo.png
   favicon: assets/favicon.ico
   features:
-    - navigation.tabs      #The navigation moves horizontally to the top as Tabs, next to the logo, instead of in the sidebar.
-    - navigation.footer 
+    - navigation.tabs #The navigation moves horizontally to the top as Tabs, next to the logo, instead of in the sidebar.
+    - navigation.footer
     - toc.integrate
     - navigation.sections
   palette:
@@ -72,6 +72,7 @@ copyright: Copyright &copy; 2025 MicroTrace Team
 
 nav:
   - Home: index.md
+  - Full Documentation: full_doc.md
   - STM32 SVD Database: svd_database.md
   - MCP Server: mcp.md
   - Ghidra Tools:
