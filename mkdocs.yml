@@ -74,6 +74,8 @@ nav:
   - Home: index.md
   - Full Documentation: full_doc.md
   - STM32 SVD Database: svd_database.md
+  - Elasticsearch Database: elasticsearch.md
+  - Electron Desktop App: electron.md
   - MCP Server: mcp.md
   - Ghidra Tools:
       - Headless Analyzer: Headless-Ghidra-ARM-Firmware-Analyzer.md

@@ -1,303 +1,66 @@
-# MCP Server Documentation
+# Model Context Protocol (MCP) Server
 
+MicroTrace integrates the **Model Context Protocol (MCP)** to securely expose extensive embedded reverse-engineering algorithms and toolsets to advanced Large Language Models and custom automation clients.
 
-## What is MCP?
+## Theoretical Overview
 
-**MCP (Model Context Protocol)** enables AI assistants (like Claude) to access external tools and data.
+The Model Context Protocol establishes a standardized, bidirectional architecture that abstracts operational functionality. By deploying an MCP Server, MicroTrace provides AI orchestration models with programmatic access to distinct reverse-engineering actions, drastically accelerating autonomous file analysis capabilities. This eliminates the necessity of traditional RAG (Retrieval-Augmented Generation) pipelines by instead empowering the model with active task execution rights.
 
-**Analogy:**
-Think of Claude as a person sitting at a desk:
-
-- **Without MCP:** Can only answer questions from memory
-- **With MCP:** Can pick up tools from the desk (calculator, file reader, analyzer) and use them
-
-**Pattern:**
-
-```
-User asks a question
-        ↓
-Claude decides it needs a tool
-        ↓
-Claude calls your MCP server
-        ↓
-Server executes the tool
-        ↓
-Result returned to Claude
-        ↓
-Claude uses result to answer
-```
-
-**Example:**
-
-```
-User: "What's in firmware.bin?"
-Claude: [Calls MCP tool "analyze_firmware"]
-Server: [Analyzes file, returns "ARM Cortex-M, 256KB"]
-Claude: "This is ARM Cortex-M firmware, 256KB in size."
-```
+The operational workflow adheres to the following sequence:
+1. **Tool Discovery:** Upon establishing an I/O connection, the MCP server emits a strict JSON Schema detailing all exposed tool functionalities and prerequisites.
+2. **Context Execution:** An AI Assistant interprets the necessity of analyzing a specific binary signature and delegates the task backward over the protocol utilizing structured parameters.
+3. **Internal Processing & Response:** The Python backend executes the proprietary tool logic and serializes the result into a standardized `.TextContent` packet, returning it upstream to enrich the Assistant's ongoing logical evaluation.
 
 ---
 
-## How MCP Works
+## Infrastructure Implementation
 
-### Three Main Components
+The local MicroTrace MCP ecosystem is constructed utilizing the officially maintained `mcp` SDK, and package dependencies are strictly governed by the `uv` virtual environment manager.
 
-1. **MCP Server**
+### System Directory
+The foundational structure for the MCP service is isolated as follows:
 
-   - Defines available tools
-   - Implements tool logic
-   - Runs as a separate process
-
-```python
-from mcp.server import Server
-import mcp.server.stdio
-
-app = Server("my-server")
-
-@app.list_tools()
-async def list_tools():
-    return [...]
-
-@app.call_tool()
-async def call_tool(name, arguments):
-    return [...]
-```
-
-2. **MCP Protocol**
-
-   - Standard communication between Claude and your server
-   - Uses stdin/stdout with JSON messages
-
-```
-Claude → {"method": "call_tool", "params": {...}} → Server
-Server → {"result": "..."} → Claude
-```
-
-3. **MCP Client**
-
-   - Connects to the server
-   - Sends requests and receives responses
-
-**Option A: Claude Desktop** (easiest)
-
-```json
-{
-  "mcpServers": {
-    "my-tools": {
-      "command": "python",
-      "args": ["server.py"]
-    }
-  }
-}
-```
-
-**Option B: Custom Client**
-
-```python
-from mcp import ClientSession, StdioServerParameters
-from mcp.client.stdio import stdio_client
-
-server_params = StdioServerParameters(command="python", args=["server.py"])
-
-async with stdio_client(server_params) as (read, write):
-    async with ClientSession(read, write) as session:
-        result = await session.call_tool("tool_name", {...})
-```
-
----
-
-## What We Did
-
-- Learned what MCP is and how it works
-- Understood that **Claude Desktop is optional**
-- Created the **first MCP server** with a "hello world" tool
-- Built a practical example (PDF reader)
-- Planned embedded reverse-engineering tools:
-
-  - Firmware architecture detection
-  - String extractor
-  - Disassembler
-  - Firmware extractor
-  - Memory layout analyzer
-  - Peripheral database
-
----
-
-## Setup Steps
-
-1. **Install UV (Python Package Manager)**
-
-**macOS/Linux:**
-
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-**Windows:**
-
-```powershell
-powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
-
-Verify installation:
-
-```bash
-uv --version
-```
-
-2. **Create Project**
-
-```bash
-mkdir embedded-re-mcp
-cd embedded-re-mcp
-uv init
-```
-
-3. **Add MCP Dependency**
-
-```bash
-uv add mcp
-```
-
-4. **Create MCP Server** (`src/server.py`)
-
-```python
-from mcp.server import Server
-from mcp.types import Tool, TextContent
-import mcp.server.stdio
-
-app = Server("my-first-server")
-
-@app.list_tools()
-async def list_tools() -> list[Tool]:
-    return [Tool(name="hello", description="Say hello", inputSchema={"type":"object","properties":{"name":{"type":"string"}},"required":["name"]})]
-
-@app.call_tool()
-async def call_tool(name: str, arguments: dict) -> list[TextContent]:
-    if name == "hello":
-        return [TextContent(type="text", text=f"Hello, {arguments['name']}!")]
-    return [TextContent(type="text", text="Unknown tool")]
-
-if __name__ == "__main__":
-    mcp.server.stdio.stdio_server()(app)
-```
-
-5. **Run Server**
-
-```bash
-uv run python src/server.py
-```
-
-6. **Connect to Claude Desktop (Optional)**
-   Edit `claude_desktop_config.json` with your server path.
-
-7. **Custom Client Example** (`src/client.py`)
-
-```python
-import asyncio
-from mcp import ClientSession, StdioServerParameters
-from mcp.client.stdio import stdio_client
-
-async def main():
-    server_params = StdioServerParameters(command="uv", args=["run","python","src/server.py"])
-    async with stdio_client(server_params) as (read, write):
-        async with ClientSession(read, write) as session:
-            await session.initialize()
-            result = await session.call_tool("hello", {"name": "World"})
-            print(result[0].text)
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```
-
----
-
-## Example: PDF Reader Tool
-
-- Install dependency:
-
-```bash
-uv add PyPDF2
-```
-
-- Create `src/pdf_server.py` with tools `read_pdf_titles` and `count_pages`
-- Implements MCP pattern like the hello example
-
----
-
-## Project Structure
-
-```
+```text
 embedded-re-mcp/
-├── .python-version
-├── pyproject.toml
-├── uv.lock
-├── README.md
-└── src/
-    ├── server.py
-    ├── client.py
-    ├── pdf_server.py
-    └── tools/
-        ├── firmware_analyzer.py
-        ├── disassembler.py
-        └── arch_detector.py
+├── pyproject.toml         # Canonical dependency manifest
+├── src/
+│   ├── server.py          # Primary Stdio-bound MCP server logic
+│   ├── client.py          # Optional implementation for programmatic invocations
+│   └── tools/             # Actionable analysis modules
+│       ├── arch_detector.py
+│       ├── disassembler.py
+│       └── firmware_analyzer.py
 ```
+
+### Diagnostic Tooling
+The server's current architectural phase is designed to surface critical reversing integrations directly to connected models:
+- **Architecture Detector (`arch_detector.py`)**: Investigates raw firmware entropy streams to determine primary instruction set architectures (ARM/MIPS/RISC-V).
+- **Instruction Disassembly (`disassembler.py`)**: Extrapolates localized byte arrays into human-readable assembly instructions leveraging the Capstone framework.
+- **Firmware Extrapolation (`firmware_analyzer.py`)**: Evaluates memory layout specifications and executes binwalk signature validations.
 
 ---
 
-## Commands Reference
+## Deployment Parameters
+
+### Dependency Resolution
+Virtual environment initialization must be facilitated natively by `uv` to maintain strict dependency chains.
 
 ```bash
+# Initialize the local virtual context and synchronize definitions
 uv init
-uv add mcp
-uv add PyPDF2
-uv run python src/server.py
-uv run python src/client.py
 uv sync
-uv add package-name
+
+# Instantiate supplementary module constraints if necessary
+uv add PyPDF2 mcp
 ```
 
----
+### Server Invocation
+The server communicates fundamentally utilizing standard input/output (`stdio`) streams. This allows it to be invoked as an agnostic subprocess by host environments.
 
-## Future Work Hints
+```bash
+# Direct subprocess invocation of the MCP Server
+uv run python src/server.py
+```
 
-Build embedded RE tools following the MCP pattern:
-
-1. Architecture detector (ARM/MIPS/RISC-V)
-2. String extractor
-3. Disassembler (Capstone)
-4. Firmware extractor (Binwalk)
-5. Memory layout analyzer
-6. Peripheral database
-
----
-
-## Key Takeaways
-
-1. MCP is a protocol, not tied to Claude Desktop
-2. Three components: Server, Protocol, Client
-3. Start simple (hello or PDF reader)
-4. Every tool follows the same pattern: name, description, schema, implementation
-5. Use MCP anywhere: CLI, web, GUI, plugins
-
----
-
-## Summary
-
-**MCP = AI access to your tools**
-
-**Pattern:**
-
-1. Define tools (name, description, schema)
-2. Implement tools (code)
-3. Run server
-4. Use from Claude or your own client
-
-We built:
-
-- Understanding of MCP
-- UV setup and project structure
-- Hello world tool
-- PDF reader tool
-- Plan for embedded reverse-engineering tools
-  Everything else builds on this foundation.
+!!! tip "Enterprise Client Integration"
+    While the protocol supports programmatic API interactions (detailed inside `src/client.py`), it integrates frictionlessly into desktop environments such as **Claude Desktop**. Integration strictly involves configuring the target application's definition profile to mirror the localized CLI invocation route.
