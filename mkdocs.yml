@@ -1,7 +1,7 @@
 site_name: MicroTrace Documentation
 site_url: https://omarsawaf1.github.io/MicroTrace-Docs/
-site_author: Omar Mohamed
-site_description: MicroTrace Documentation
+site_author: MicroTrace Team
+site_description: User and developer documentation for the MicroTrace firmware analysis platform.
 repo_name: MicroTrace-Docs
 repo_url: https://github.com/omarsawaf1/MicroTrace-Docs
 
@@ -13,10 +13,15 @@ theme:
   logo: assets/MicroTrace_Logo.png
   favicon: assets/favicon.ico
   features:
-    - navigation.tabs #The navigation moves horizontally to the top as Tabs, next to the logo, instead of in the sidebar.
-    - navigation.footer
-    - toc.integrate
+    - navigation.tabs
     - navigation.sections
+    - navigation.footer
+    - navigation.top
+    - content.code.copy
+    - content.action.edit
+    - search.suggest
+    - search.highlight
+    - toc.integrate
   palette:
     - media: "(prefers-color-scheme)"
       toggle:
@@ -37,11 +42,19 @@ theme:
         icon: material/toggle-switch-off
         name: Switch to system preference
 
+plugins:
+  - search
+  - mermaid2
+
 markdown_extensions:
   - attr_list
-  # - toc:
-  #   permalink: true
-  #   toc_depth: 3
+  - tables
+  - admonition
+  - pymdownx.details
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
@@ -49,17 +62,11 @@ markdown_extensions:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
-  - pymdownx.inlinehilite
-  - pymdownx.snippets
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
-  - pymdownx.tabbed:
-      alternate_style: true
-  - admonition
-  - pymdownx.details
+          format: !!python/name:mermaid2.fence_mermaid_custom
 
 extra:
   social:
@@ -68,17 +75,29 @@ extra:
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/omar-mohamed-hatem-057a8025b/
 
-copyright: Copyright &copy; 2025 MicroTrace Team
+copyright: Copyright &copy; 2026 MicroTrace Team
 
 nav:
   - Home: index.md
-  - Full Documentation: full_doc.md
-  - STM32 SVD Database: svd_database.md
-  - MCP Server: mcp.md
-  - Ghidra Tools:
-      - Headless Analyzer: Headless-Ghidra-ARM-Firmware-Analyzer.md
-  # - Ghidra Scripts: ghidra.md
-  # - Frontend Visualization: frontend.md
-  # - Features:
-  #     - Overview: features/README.md
-  # - Use Cases: usecases.md
+  - Documentation:
+      - Overview: index-overview.md
+      - Getting Started:
+          - Platform Overview: getting-started/overview.md
+          - Local Development: getting-started/local-development.md
+          - Docker Deployment: getting-started/docker.md
+      - User Guide:
+          - Desktop Workflow: user-guide/desktop-workflow.md
+          - MCP Workspace: user-guide/mcp-workspace.md
+          - Settings and Troubleshooting: user-guide/settings-troubleshooting.md
+      - Developer Guide:
+          - Architecture: developer-guide/architecture.md
+          - Backend: developer-guide/backend.md
+          - Frontend and Electron: developer-guide/frontend.md
+          - MCP Server: developer-guide/mcp.md
+          - Ghidra Headless: developer-guide/ghidra-headless.md
+          - Docker and Operations: developer-guide/docker-deployment.md
+      - Reference:
+          - API Reference: reference/api-reference.md
+          - Environment and Paths: reference/environment-and-paths.md
+          - SVD Database: reference/svd-database.md
+  - Git Submodules: github-submodules.md
