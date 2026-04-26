@@ -21,6 +21,12 @@ The frontend provides:
 | `src/mcp/client.ts` | MCP UI behavior |
 | `src/api.ts` | backend API helper |
 
+The decompiled code panel includes an icon-only top-right copy action for the selected function's C code. The action is rendered with the code viewer so it stays beside the decompiled code instead of the graph toolbar.
+
+The MCP composer exposes separate sends for normal chat, Online Search, and Deep Research. Online Search explicitly routes the request through the `online_search` tool. Deep Research asks for structured firmware/project analysis and can use online search only when current web context is useful.
+
+The custom tool runner uses the MCP `/tools` response to autocomplete detected working custom tool names while keeping the field editable for exact manual `TOOL_NAME` entry.
+
 ## Electron Responsibilities
 
 Electron:
